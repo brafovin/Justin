@@ -3,102 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brawl Heroes</title>
+    <title>FORTNITE CLONE 3D</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
-    <!-- Startmenü -->
+    <!-- ============ STARTMENÜ ============ -->
     <div id="main-menu" class="screen active">
-        <div class="menu-bg"></div>
-        <div class="menu-content">
-            <h1 class="game-title">BRAWL <span>HEROES</span></h1>
-            <div class="currency-display">
-                <div class="currency">
-                    <span class="coin-icon">$</span>
-                    <span id="menu-coins">500</span>
+        <div class="menu-bg-3d"></div>
+        <div class="menu-top-bar">
+            <div class="player-info">
+                <div class="player-avatar">P</div>
+                <div class="player-level">
+                    <div class="level-name">KRIEGER</div>
+                    <div class="level-xp">LVL 42</div>
                 </div>
-                <div class="currency">
+            </div>
+            <div class="currency-display">
+                <div class="currency coin-currency">
+                    <span class="coin-icon">&#9733;</span>
+                    <span id="menu-coins">1000</span>
+                </div>
+                <div class="currency gem-currency">
                     <span class="gem-icon">&#9670;</span>
                     <span id="menu-gems">50</span>
                 </div>
             </div>
-            <div class="current-brawler">
-                <div class="brawler-label">Ausgewählter Brawler</div>
-                <div id="selected-brawler-name">SHELLY</div>
-                <div id="selected-brawler-preview" class="brawler-preview"></div>
-            </div>
-            <div class="menu-buttons">
-                <button class="menu-btn play-btn" onclick="startGame()">
-                    <span class="btn-icon">&#9654;</span> SPIELEN
-                </button>
-                <button class="menu-btn shop-btn" onclick="openShop()">
-                    <span class="btn-icon">&#128722;</span> SHOP
-                </button>
-                <button class="menu-btn brawlers-btn" onclick="openBrawlers()">
-                    <span class="btn-icon">&#128101;</span> BRAWLER
-                </button>
-            </div>
-            <div class="menu-footer">WASD zum Bewegen &bull; Maus zum Zielen &bull; Klick zum Schie&szlig;en</div>
         </div>
+
+        <div class="menu-center">
+            <h1 class="game-title">FORT<span>ZONE</span></h1>
+            <div class="game-subtitle">BATTLE ROYALE</div>
+            <div class="character-showcase">
+                <div id="character-preview" class="character-preview">
+                    <div class="char-head"></div>
+                    <div class="char-body"></div>
+                    <div class="char-legs"></div>
+                </div>
+                <div class="showcase-glow"></div>
+            </div>
+        </div>
+
+        <div class="menu-nav">
+            <button class="nav-btn active" onclick="showTab('home')">
+                <span class="nav-icon">&#127968;</span> HOME
+            </button>
+            <button class="nav-btn" onclick="openShop()">
+                <span class="nav-icon">&#128722;</span> SHOP
+            </button>
+            <button class="nav-btn" onclick="openLocker()">
+                <span class="nav-icon">&#128100;</span> SPIND
+            </button>
+        </div>
+
+        <!-- Play Button Unten Rechts -->
+        <button class="play-button" onclick="startMatchmaking()">
+            <div class="play-button-inner">
+                <span class="play-icon">&#9654;</span>
+                <span class="play-text">SPIELEN</span>
+            </div>
+        </button>
+
+        <div class="menu-footer-hint">WASD Bewegen &bull; Maus Zielen &bull; Linksklick Schie&szlig;en &bull; Leertaste Fallschirm/Springen</div>
     </div>
 
-    <!-- Shop -->
+    <!-- ============ SHOP ============ -->
     <div id="shop-screen" class="screen">
-        <div class="shop-header">
-            <button class="back-btn" onclick="backToMenu()">&larr; Zur&uuml;ck</button>
-            <h2>SHOP</h2>
+        <div class="top-bar">
+            <button class="back-btn" onclick="backToMenu()">&larr; ZUR&Uuml;CK</button>
+            <h2 class="screen-title">ITEM SHOP</h2>
             <div class="currency-display">
-                <div class="currency">
-                    <span class="coin-icon">$</span>
-                    <span id="shop-coins">500</span>
-                </div>
-                <div class="currency">
-                    <span class="gem-icon">&#9670;</span>
-                    <span id="shop-gems">50</span>
+                <div class="currency coin-currency">
+                    <span class="coin-icon">&#9733;</span>
+                    <span id="shop-coins">1000</span>
                 </div>
             </div>
         </div>
-        <div class="shop-items" id="shop-items"></div>
-    </div>
-
-    <!-- Brawler Auswahl -->
-    <div id="brawlers-screen" class="screen">
-        <div class="shop-header">
-            <button class="back-btn" onclick="backToMenu()">&larr; Zur&uuml;ck</button>
-            <h2>DEINE BRAWLER</h2>
+        <div class="shop-tabs">
+            <button class="tab-btn active" onclick="showShopTab('skins')">SKINS</button>
+            <button class="tab-btn" onclick="showShopTab('backpacks')">RUCKS&Auml;CKE</button>
+            <button class="tab-btn" onclick="showShopTab('pickaxes')">SPITZHACKEN</button>
         </div>
-        <div class="brawlers-grid" id="brawlers-grid"></div>
+        <div class="shop-grid" id="shop-grid"></div>
     </div>
 
-    <!-- Spiel -->
+    <!-- ============ LOCKER (Spind) ============ -->
+    <div id="locker-screen" class="screen">
+        <div class="top-bar">
+            <button class="back-btn" onclick="backToMenu()">&larr; ZUR&Uuml;CK</button>
+            <h2 class="screen-title">DEIN SPIND</h2>
+        </div>
+        <div class="locker-categories">
+            <div class="locker-section">
+                <h3>SKIN</h3>
+                <div class="locker-grid" id="locker-skins"></div>
+            </div>
+            <div class="locker-section">
+                <h3>RUCKSACK</h3>
+                <div class="locker-grid" id="locker-backpacks"></div>
+            </div>
+            <div class="locker-section">
+                <h3>SPITZHACKE</h3>
+                <div class="locker-grid" id="locker-pickaxes"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ MATCHMAKING ============ -->
+    <div id="matchmaking-screen" class="screen">
+        <div class="matchmaking-content">
+            <div class="loading-spinner"></div>
+            <h2 class="matchmaking-title">SPIELER SUCHE</h2>
+            <div class="matchmaking-subtitle" id="matchmaking-status">Suche nach Gegnern...</div>
+            <div class="matchmaking-players">
+                <div class="player-count"><span id="found-players">0</span> / 20 Spieler</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="matchmaking-progress"></div>
+                </div>
+            </div>
+            <button class="cancel-btn" onclick="cancelMatchmaking()">ABBRECHEN</button>
+        </div>
+    </div>
+
+    <!-- ============ SPIEL ============ -->
     <div id="game-screen" class="screen">
+        <canvas id="game-canvas"></canvas>
+
+        <!-- HUD -->
         <div class="game-hud">
-            <div class="hud-left">
-                <div class="hp-bar">
-                    <div class="hp-label">HP</div>
-                    <div class="hp-bar-outer">
-                        <div id="hp-fill" class="hp-bar-inner"></div>
-                    </div>
-                    <div id="hp-text">100 / 100</div>
+            <div class="hud-top">
+                <div class="players-alive">
+                    <span class="hud-icon">&#128101;</span>
+                    <span id="alive-count">21</span>
+                </div>
+                <div class="kills-display">
+                    <span class="hud-icon">&#9876;</span>
+                    KILLS: <span id="kill-count">0</span>
                 </div>
             </div>
-            <div class="hud-center">
-                <div class="timer">⏱ <span id="game-timer">2:00</span></div>
-            </div>
-            <div class="hud-right">
-                <div class="score">Kills: <span id="kill-count">0</span></div>
-                <button class="quit-btn" onclick="quitGame()">✕</button>
+
+            <div class="hud-bottom">
+                <div class="health-container">
+                    <div class="hp-bar">
+                        <div class="hp-label">HP</div>
+                        <div class="hp-bar-outer">
+                            <div id="hp-fill" class="hp-bar-inner"></div>
+                        </div>
+                        <div id="hp-text">100 / 100</div>
+                    </div>
+                    <div class="shield-bar">
+                        <div class="hp-label">SCHILD</div>
+                        <div class="hp-bar-outer">
+                            <div id="shield-fill" class="shield-bar-inner"></div>
+                        </div>
+                        <div id="shield-text">50 / 100</div>
+                    </div>
+                </div>
+
+                <div class="weapon-info">
+                    <div id="weapon-name">ASSAULT RIFLE</div>
+                    <div id="weapon-ammo">30 / 90</div>
+                </div>
             </div>
         </div>
-        <canvas id="game-canvas"></canvas>
+
+        <!-- Crosshair -->
+        <div class="crosshair">
+            <div class="crosshair-dot"></div>
+            <div class="crosshair-line top"></div>
+            <div class="crosshair-line bottom"></div>
+            <div class="crosshair-line left"></div>
+            <div class="crosshair-line right"></div>
+        </div>
+
+        <!-- Bus Notification -->
+        <div id="bus-notification" class="bus-notification">
+            <div class="bus-text">DR&Uuml;CKE LEERTASTE ZUM ABSPRINGEN!</div>
+        </div>
+
+        <!-- Parachute Hint -->
+        <div id="parachute-hint" class="parachute-hint hidden">
+            <div>LEERTASTE F&Uuml;R FALLSCHIRM</div>
+        </div>
+
+        <!-- Kill Feed -->
+        <div id="kill-feed" class="kill-feed"></div>
+
+        <!-- Game Over Overlay -->
         <div id="game-over-overlay" class="overlay hidden">
             <div class="overlay-content">
-                <h2 id="game-over-title">SIEG!</h2>
+                <h2 id="game-over-title">VICTORY ROYALE!</h2>
                 <div class="rewards">
-                    <div>Kills: <span id="result-kills">0</span></div>
-                    <div class="reward-coins">+<span id="reward-coins">0</span> $</div>
+                    <div class="reward-stat">Kills: <span id="result-kills">0</span></div>
+                    <div class="reward-stat">Platz: #<span id="result-place">1</span></div>
+                    <div class="reward-coins">+<span id="reward-coins">0</span> <span class="coin-icon">&#9733;</span></div>
                 </div>
-                <button class="menu-btn" onclick="backToMenu()">Zum Menü</button>
+                <button class="menu-btn" onclick="backToMenu()">ZUM MEN&Uuml;</button>
             </div>
         </div>
     </div>
