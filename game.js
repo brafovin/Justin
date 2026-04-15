@@ -712,11 +712,19 @@ function shoot() {
     ammo--;
     updateHUD();
 
-    // Raycast from camera forward
-    const raycaster = new THREE.Raycaster();
-    const dir = new THREE.Vector3();
-    camera.getWorldDirection(dir);
-    raycaster.set(camera.position, dir);
+    // Shoot from the player's gun position toward what the camera is aiming at
+    const camDir = new THREE.Vector3();
+    camera.getWorldDirection(camDir);
+    // Aim point = far point along camera forward
+    const aimTarget = camera.position.clone().add(camDir.clone().multiplyScalar(500));
+    const gunOrigin = new THREE.Vector3(
+        playerModel.position.x,
+        playerModel.position.y + 2.5,
+        playerModel.position.z
+    );
+    const shootDir = aimTarget.sub(gunOrigin).normalize();
+
+    const raycaster = new THREE.Raycaster(gunOrigin, shootDir);
 
     // Check bot hits
     let hitBot = null, hitDist = Infinity;
@@ -725,7 +733,7 @@ function shoot() {
         const botHitbox = new THREE.Box3().setFromObject(bot.mesh);
         const hit = raycaster.ray.intersectBox(botHitbox, new THREE.Vector3());
         if (hit) {
-            const dist = camera.position.distanceTo(hit);
+            const dist = gunOrigin.distanceTo(hit);
             if (dist < hitDist) {
                 hitDist = dist;
                 hitBot = bot;
@@ -739,17 +747,20 @@ function shoot() {
         }
     }
 
-    // Muzzle flash
-    spawnMuzzleFlash();
-    // Tracer
-    spawnTracer(camera.position, dir);
+    // Muzzle flash + tracer originate from the player's gun
+    spawnMuzzleFlash(gunOrigin, shootDir);
+    spawnTracer(gunOrigin, shootDir);
 }
 
-function spawnMuzzleFlash() {
+function spawnMuzzleFlash(origin, dir) {
     const flash = new THREE.PointLight(0xffaa00, 5, 10);
-    const dir = new THREE.Vector3();
-    camera.getWorldDirection(dir);
-    flash.position.copy(camera.position).add(dir.multiplyScalar(2));
+    if (origin && dir) {
+        flash.position.copy(origin).add(dir.clone().multiplyScalar(1.5));
+    } else {
+        const d = new THREE.Vector3();
+        camera.getWorldDirection(d);
+        flash.position.copy(camera.position).add(d.multiplyScalar(2));
+    }
     scene.add(flash);
     setTimeout(() => scene.remove(flash), 60);
 }
@@ -925,19 +936,42 @@ function updatePlayer(dt) {
         }
     });
 
-    // First-person camera
-    const eyePos = new THREE.Vector3(
-        playerModel.position.x,
-        playerModel.position.y + 3.2,
-        playerModel.position.z
-    );
-    camera.position.copy(eyePos);
+    // Third-person camera (behind + above player so the skin is visible)
+    const camDistance = 7;
+    const camHeight = 4.5;
     const lookDir = new THREE.Vector3(
         -Math.sin(yawAngle) * Math.cos(pitchAngle),
         Math.sin(pitchAngle),
         -Math.cos(yawAngle) * Math.cos(pitchAngle)
     );
-    camera.lookAt(eyePos.clone().add(lookDir));
+    const focusPoint = new THREE.Vector3(
+        playerModel.position.x,
+        playerModel.position.y + 3.2,
+        playerModel.position.z
+    );
+    // Camera sits behind the player along the negative look direction
+    const camOffset = lookDir.clone().multiplyScalar(-camDistance);
+    camOffset.y += camHeight;
+    const desiredCamPos = focusPoint.clone().add(camOffset);
+
+    // Simple collision: pull camera closer if it would clip into an obstacle
+    const camRay = new THREE.Raycaster(focusPoint, camOffset.clone().normalize(), 0, camDistance + 2);
+    const hits = camRay.intersectObjects(scene.children, true);
+    let finalDistance = camDistance;
+    for (const h of hits) {
+        if (h.object === playerModel || playerModel.children.includes(h.object)) continue;
+        if (h.distance < finalDistance) {
+            finalDistance = Math.max(2, h.distance - 0.5);
+            break;
+        }
+    }
+    const finalOffset = lookDir.clone().multiplyScalar(-finalDistance);
+    finalOffset.y += camHeight;
+    camera.position.copy(focusPoint).add(finalOffset);
+
+    // Look slightly ahead of the player so aiming matches the crosshair
+    const aimPoint = focusPoint.clone().add(lookDir.clone().multiplyScalar(20));
+    camera.lookAt(aimPoint);
 
     // Shield regen
     if (playerShield < 100) playerShield = Math.min(100, playerShield + dt * 3);
