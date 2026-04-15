@@ -3,106 +3,219 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brawl Heroes</title>
+    <title>FORTCRAFT - Battle Royale</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Startmenü -->
+    <!-- ================= STARTMENÜ ================= -->
     <div id="main-menu" class="screen active">
         <div class="menu-bg"></div>
-        <div class="menu-content">
-            <h1 class="game-title">BRAWL <span>HEROES</span></h1>
+        <div class="menu-top-bar">
+            <div class="logo">FORT<span>CRAFT</span></div>
             <div class="currency-display">
-                <div class="currency">
-                    <span class="coin-icon">$</span>
-                    <span id="menu-coins">500</span>
-                </div>
-                <div class="currency">
-                    <span class="gem-icon">&#9670;</span>
-                    <span id="menu-gems">50</span>
-                </div>
+                <span class="coin-icon">&#11044;</span>
+                <span id="menu-coins">1000</span>
             </div>
-            <div class="current-brawler">
-                <div class="brawler-label">Ausgewählter Brawler</div>
-                <div id="selected-brawler-name">SHELLY</div>
-                <div id="selected-brawler-preview" class="brawler-preview"></div>
-            </div>
-            <div class="menu-buttons">
-                <button class="menu-btn play-btn" onclick="startGame()">
-                    <span class="btn-icon">&#9654;</span> SPIELEN
-                </button>
-                <button class="menu-btn shop-btn" onclick="openShop()">
-                    <span class="btn-icon">&#128722;</span> SHOP
-                </button>
-                <button class="menu-btn brawlers-btn" onclick="openBrawlers()">
-                    <span class="btn-icon">&#128101;</span> BRAWLER
-                </button>
-            </div>
-            <div class="menu-footer">WASD zum Bewegen &bull; Maus zum Zielen &bull; Klick zum Schie&szlig;en</div>
         </div>
+
+        <div class="menu-center">
+            <div class="character-stage">
+                <div id="character-preview" class="character-preview"></div>
+                <div class="char-name" id="char-name">DEFAULT DRIFT</div>
+            </div>
+        </div>
+
+        <div class="menu-side-buttons">
+            <button class="side-btn" onclick="openShop()">
+                <span class="side-icon">&#128722;</span>
+                <span>SHOP</span>
+            </button>
+            <button class="side-btn" onclick="openLocker()">
+                <span class="side-icon">&#128188;</span>
+                <span>SPIND</span>
+            </button>
+            <button class="side-btn" onclick="openHelp()">
+                <span class="side-icon">?</span>
+                <span>HILFE</span>
+            </button>
+        </div>
+
+        <button class="play-button" onclick="startGame()">
+            <span class="play-icon">&#9654;</span>
+            <span class="play-text">SPIELEN</span>
+        </button>
     </div>
 
-    <!-- Shop -->
+    <!-- ================= SHOP ================= -->
     <div id="shop-screen" class="screen">
-        <div class="shop-header">
-            <button class="back-btn" onclick="backToMenu()">&larr; Zur&uuml;ck</button>
-            <h2>SHOP</h2>
+        <div class="sub-header">
+            <button class="back-btn" onclick="backToMenu()">&larr; ZUR&Uuml;CK</button>
+            <h2>ITEM SHOP</h2>
             <div class="currency-display">
-                <div class="currency">
-                    <span class="coin-icon">$</span>
-                    <span id="shop-coins">500</span>
-                </div>
-                <div class="currency">
-                    <span class="gem-icon">&#9670;</span>
-                    <span id="shop-gems">50</span>
-                </div>
+                <span class="coin-icon">&#11044;</span>
+                <span id="shop-coins">1000</span>
             </div>
         </div>
-        <div class="shop-items" id="shop-items"></div>
-    </div>
-
-    <!-- Brawler Auswahl -->
-    <div id="brawlers-screen" class="screen">
-        <div class="shop-header">
-            <button class="back-btn" onclick="backToMenu()">&larr; Zur&uuml;ck</button>
-            <h2>DEINE BRAWLER</h2>
+        <div class="shop-tabs">
+            <button class="tab-btn active" data-tab="pickaxe">SPITZHACKEN</button>
+            <button class="tab-btn" data-tab="skin">SKINS</button>
+            <button class="tab-btn" data-tab="backpack">RUCKS&Auml;CKE</button>
         </div>
-        <div class="brawlers-grid" id="brawlers-grid"></div>
+        <div class="shop-grid" id="shop-grid"></div>
     </div>
 
-    <!-- Spiel -->
+    <!-- ================= SPIND (Inventar) ================= -->
+    <div id="locker-screen" class="screen">
+        <div class="sub-header">
+            <button class="back-btn" onclick="backToMenu()">&larr; ZUR&Uuml;CK</button>
+            <h2>DEIN SPIND</h2>
+            <div class="currency-display">
+                <span class="coin-icon">&#11044;</span>
+                <span id="locker-coins">1000</span>
+            </div>
+        </div>
+        <div class="shop-tabs">
+            <button class="tab-btn active" data-tab="pickaxe">SPITZHACKEN</button>
+            <button class="tab-btn" data-tab="skin">SKINS</button>
+            <button class="tab-btn" data-tab="backpack">RUCKS&Auml;CKE</button>
+        </div>
+        <div class="shop-grid" id="locker-grid"></div>
+    </div>
+
+    <!-- ================= HILFE ================= -->
+    <div id="help-screen" class="screen">
+        <div class="sub-header">
+            <button class="back-btn" onclick="backToMenu()">&larr; ZUR&Uuml;CK</button>
+            <h2>STEUERUNG</h2>
+            <div></div>
+        </div>
+        <div class="help-content">
+            <div class="help-col">
+                <h3>BEWEGUNG</h3>
+                <div class="key-row"><span class="key">W A S D</span> Bewegen</div>
+                <div class="key-row"><span class="key">LEERTASTE</span> Springen</div>
+                <div class="key-row"><span class="key">SHIFT</span> Sprinten</div>
+                <div class="key-row"><span class="key">MAUS</span> Umsehen</div>
+            </div>
+            <div class="help-col">
+                <h3>KAMPF</h3>
+                <div class="key-row"><span class="key">LINKSKLICK</span> Schie&szlig;en / Bauen</div>
+                <div class="key-row"><span class="key">1</span> Spitzhacke</div>
+                <div class="key-row"><span class="key">2</span> Sturmgewehr</div>
+                <div class="key-row"><span class="key">3</span> Schrotflinte</div>
+                <div class="key-row"><span class="key">4</span> Scharfsch&uuml;tzengewehr</div>
+                <div class="key-row"><span class="key">R</span> Nachladen</div>
+            </div>
+            <div class="help-col">
+                <h3>BAUEN</h3>
+                <div class="key-row"><span class="key">Q</span> Baumen&uuml; umschalten</div>
+                <div class="key-row"><span class="key">F1</span> Wand</div>
+                <div class="key-row"><span class="key">F2</span> Boden</div>
+                <div class="key-row"><span class="key">F3</span> Rampe</div>
+                <div class="key-row"><span class="key">F4</span> Dach</div>
+                <div class="key-row"><span class="key">ESC</span> Pause / Spiel verlassen</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= SPIEL ================= -->
     <div id="game-screen" class="screen">
-        <div class="game-hud">
-            <div class="hud-left">
-                <div class="hp-bar">
-                    <div class="hp-label">HP</div>
-                    <div class="hp-bar-outer">
-                        <div id="hp-fill" class="hp-bar-inner"></div>
-                    </div>
-                    <div id="hp-text">100 / 100</div>
+        <canvas id="game-canvas"></canvas>
+
+        <!-- HUD -->
+        <div class="hud">
+            <div class="crosshair">
+                <div class="ch-line ch-top"></div>
+                <div class="ch-line ch-bottom"></div>
+                <div class="ch-line ch-left"></div>
+                <div class="ch-line ch-right"></div>
+                <div class="ch-dot"></div>
+            </div>
+
+            <!-- Oben links: HP + Schild -->
+            <div class="hud-top-left">
+                <div class="bar shield-bar">
+                    <div class="bar-fill" id="shield-fill" style="width:100%"></div>
+                    <span class="bar-label">SCHILD <span id="shield-text">100</span></span>
+                </div>
+                <div class="bar hp-bar">
+                    <div class="bar-fill" id="hp-fill" style="width:100%"></div>
+                    <span class="bar-label">HP <span id="hp-text">100</span></span>
                 </div>
             </div>
-            <div class="hud-center">
-                <div class="timer">⏱ <span id="game-timer">2:00</span></div>
+
+            <!-- Oben rechts: Kills + Gegner + Timer -->
+            <div class="hud-top-right">
+                <div class="stat-pill">Gegner &uuml;brig: <span id="enemies-left">0</span></div>
+                <div class="stat-pill">Eliminierungen: <span id="kill-count">0</span></div>
             </div>
-            <div class="hud-right">
-                <div class="score">Kills: <span id="kill-count">0</span></div>
-                <button class="quit-btn" onclick="quitGame()">✕</button>
+
+            <!-- Unten rechts: Waffen-Slots -->
+            <div class="hud-bottom-right">
+                <div class="ammo-display" id="ammo-display">
+                    <span id="ammo-current">30</span> / <span id="ammo-reserve">90</span>
+                </div>
+                <div class="weapon-slots" id="weapon-slots"></div>
+            </div>
+
+            <!-- Unten mitte: Baumodus -->
+            <div class="build-mode" id="build-mode">
+                <div class="build-title">BAUMODUS</div>
+                <div class="build-slots">
+                    <div class="build-slot active" data-build="wall"><div class="build-icon">&#9632;</div><span>Wand (F1)</span></div>
+                    <div class="build-slot" data-build="floor"><div class="build-icon">&#9643;</div><span>Boden (F2)</span></div>
+                    <div class="build-slot" data-build="ramp"><div class="build-icon">&#9650;</div><span>Rampe (F3)</span></div>
+                    <div class="build-slot" data-build="roof"><div class="build-icon">&#9648;</div><span>Dach (F4)</span></div>
+                </div>
+                <div class="build-hint">Material: Holz <span id="wood-count">500</span></div>
+            </div>
+
+            <!-- Unten links: Mini-Materialien -->
+            <div class="hud-bottom-left">
+                <div class="mat-pill"><span class="mat-ic">&#127794;</span><span id="mat-wood">500</span></div>
+            </div>
+
+            <!-- Damage Overlay -->
+            <div class="damage-vignette" id="damage-vignette"></div>
+
+            <!-- Hitmarker -->
+            <div class="hitmarker hidden" id="hitmarker"></div>
+        </div>
+
+        <!-- Pause Menü -->
+        <div class="overlay hidden" id="pause-overlay">
+            <div class="overlay-content">
+                <h2>PAUSE</h2>
+                <button class="big-btn" onclick="resumeGame()">WEITERSPIELEN</button>
+                <button class="big-btn red" onclick="quitGame()">SPIEL VERLASSEN</button>
             </div>
         </div>
-        <canvas id="game-canvas"></canvas>
-        <div id="game-over-overlay" class="overlay hidden">
+
+        <!-- Game Over / Sieg Menü -->
+        <div class="overlay hidden" id="result-overlay">
             <div class="overlay-content">
-                <h2 id="game-over-title">SIEG!</h2>
-                <div class="rewards">
-                    <div>Kills: <span id="result-kills">0</span></div>
-                    <div class="reward-coins">+<span id="reward-coins">0</span> $</div>
+                <h2 id="result-title">SIEG!</h2>
+                <div class="result-stats">
+                    <div>Eliminierungen: <span id="result-kills">0</span></div>
+                    <div>Platzierung: <span id="result-place">#1</span></div>
+                    <div class="reward">Belohnung: <span class="coin-icon">&#11044;</span> <span id="result-coins">0</span></div>
                 </div>
-                <button class="menu-btn" onclick="backToMenu()">Zum Menü</button>
+                <button class="big-btn" onclick="quitGame()">ZUM MEN&Uuml;</button>
+            </div>
+        </div>
+
+        <!-- Klick-zum-Starten Overlay -->
+        <div class="overlay" id="lock-overlay">
+            <div class="overlay-content">
+                <h2>BEREIT?</h2>
+                <p class="lock-hint">Klicke irgendwo, um dein Spiel zu starten und die Maus einzufangen.</p>
+                <button class="big-btn" id="lock-start-btn">LOS GEHT'S</button>
             </div>
         </div>
     </div>
 
+    <!-- Three.js -->
+    <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
     <script src="game.js"></script>
 </body>
 </html>
