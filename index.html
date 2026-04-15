@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brawl Heroes</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Startmenü -->
+    <div id="main-menu" class="screen active">
+        <div class="menu-bg"></div>
+        <div class="menu-content">
+            <h1 class="game-title">BRAWL <span>HEROES</span></h1>
+            <div class="currency-display">
+                <div class="currency">
+                    <span class="coin-icon">$</span>
+                    <span id="menu-coins">500</span>
+                </div>
+                <div class="currency">
+                    <span class="gem-icon">&#9670;</span>
+                    <span id="menu-gems">50</span>
+                </div>
+            </div>
+            <div class="current-brawler">
+                <div class="brawler-label">Ausgewählter Brawler</div>
+                <div id="selected-brawler-name">SHELLY</div>
+                <div id="selected-brawler-preview" class="brawler-preview"></div>
+            </div>
+            <div class="menu-buttons">
+                <button class="menu-btn play-btn" onclick="startGame()">
+                    <span class="btn-icon">&#9654;</span> SPIELEN
+                </button>
+                <button class="menu-btn shop-btn" onclick="openShop()">
+                    <span class="btn-icon">&#128722;</span> SHOP
+                </button>
+                <button class="menu-btn brawlers-btn" onclick="openBrawlers()">
+                    <span class="btn-icon">&#128101;</span> BRAWLER
+                </button>
+            </div>
+            <div class="menu-footer">WASD zum Bewegen &bull; Maus zum Zielen &bull; Klick zum Schie&szlig;en</div>
+        </div>
+    </div>
+
+    <!-- Shop -->
+    <div id="shop-screen" class="screen">
+        <div class="shop-header">
+            <button class="back-btn" onclick="backToMenu()">&larr; Zur&uuml;ck</button>
+            <h2>SHOP</h2>
+            <div class="currency-display">
+                <div class="currency">
+                    <span class="coin-icon">$</span>
+                    <span id="shop-coins">500</span>
+                </div>
+                <div class="currency">
+                    <span class="gem-icon">&#9670;</span>
+                    <span id="shop-gems">50</span>
+                </div>
+            </div>
+        </div>
+        <div class="shop-items" id="shop-items"></div>
+    </div>
+
+    <!-- Brawler Auswahl -->
+    <div id="brawlers-screen" class="screen">
+        <div class="shop-header">
+            <button class="back-btn" onclick="backToMenu()">&larr; Zur&uuml;ck</button>
+            <h2>DEINE BRAWLER</h2>
+        </div>
+        <div class="brawlers-grid" id="brawlers-grid"></div>
+    </div>
+
+    <!-- Spiel -->
+    <div id="game-screen" class="screen">
+        <div class="game-hud">
+            <div class="hud-left">
+                <div class="hp-bar">
+                    <div class="hp-label">HP</div>
+                    <div class="hp-bar-outer">
+                        <div id="hp-fill" class="hp-bar-inner"></div>
+                    </div>
+                    <div id="hp-text">100 / 100</div>
+                </div>
+            </div>
+            <div class="hud-center">
+                <div class="timer">⏱ <span id="game-timer">2:00</span></div>
+            </div>
+            <div class="hud-right">
+                <div class="score">Kills: <span id="kill-count">0</span></div>
+                <button class="quit-btn" onclick="quitGame()">✕</button>
+            </div>
+        </div>
+        <canvas id="game-canvas"></canvas>
+        <div id="game-over-overlay" class="overlay hidden">
+            <div class="overlay-content">
+                <h2 id="game-over-title">SIEG!</h2>
+                <div class="rewards">
+                    <div>Kills: <span id="result-kills">0</span></div>
+                    <div class="reward-coins">+<span id="reward-coins">0</span> $</div>
+                </div>
+                <button class="menu-btn" onclick="backToMenu()">Zum Menü</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
